@@ -1,0 +1,61 @@
+<main class="create">
+  {{#if user}}
+    <!-- Create Page (Only for logged-in users) -->
+    <section id="create">
+      <div class="form">
+        <h2>Add item</h2>
+        <form class="create-form" method="post" action="/animal/addAnimalPost">
+          <input
+            type="text"
+            name="name"
+            value="{{animal.name}}"
+            id="name"
+            placeholder="Name"
+          />
+          <input
+            type="text"
+            name="years"
+            value="{{animal.years}}"
+            id="years"
+            placeholder="Years"
+          />
+          <input
+            type="text"
+            name="kind"
+            value="{{animal.kind}}"
+            id="kind"
+            placeholder="Kind"
+          />
+          <input
+            type="text"
+            name="imageUrl"
+            value="{{animal.imageUrl}}"
+            id="animal-img"
+            placeholder="Image url"
+          />
+          <input
+            type="text"
+            name="need"
+            value="{{animal.need}}"
+            id="needs-of"
+            placeholder="Needs of"
+          />
+          <input
+            type="text"
+            name="location"
+            value="{{animal.location}}"
+            id="location"
+            placeholder="Location"
+          />
+          <textarea
+            id="description"
+            placeholder="Description..."
+            name="description"
+          >{{animal.description}}</textarea>
+
+          <button type="submit">Post</button>
+        </form>
+      </div>
+    </section>
+  {{/if}}
+</main>

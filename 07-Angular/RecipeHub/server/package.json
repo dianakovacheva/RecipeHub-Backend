@@ -1,35 +1,22 @@
 {
-  "name": "rest-api",
+  "name": "10_exam_scaffolder",
   "version": "1.0.0",
-  "description": "REST-api for back-end of React project",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/BoogyHS/REST-api.git"
-  },
-  "keywords": [
-    "rest-api"
-  ],
-  "author": "BoogyHS",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/BoogyHS/REST-api/issues"
-  },
-  "homepage": "https://github.com/BoogyHS/REST-api#readme",
   "dependencies": {
-    "bcrypt": "^5.0.0",
-    "cookie-parser": "^1.4.5",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.19"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.4"
+    "bcrypt": "^5.1.0",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.2",
+    "express-handlebars": "^7.0.7",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.2.1",
+    "nodemon": "^2.0.22"
   }
 }

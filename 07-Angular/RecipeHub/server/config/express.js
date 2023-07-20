@@ -1,15 +1,20 @@
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const cookieSecret = process.env.COOKIESECRET || 'SoftUni';
-// const { errorHandler } = require('../utils')
+const express = require("express");
+const handlebars = require("express-handlebars");
+const cookieParser = require("cookie-parser");
+const session = require("../middlewares/session");
+const trimBody = require("../middlewares/trimBody");
 
 module.exports = (app) => {
-    app.use(express.json());
+  const hbs = handlebars.create({
+    extname: ".hbs",
+  });
 
-    app.use(cookieParser(cookieSecret));
+  app.engine(".hbs", hbs.engine);
+  app.set("view engine", ".hbs");
 
-    app.use(express.static(path.resolve(__basedir, 'static')));
-
-    // app.use(errorHandler(err, req, res, next));
+  app.use("/static", express.static("static"));
+  app.use(express.urlencoded({ extended: true }));
+  app.use(cookieParser());
+  app.use(session());
+  app.use(trimBody());
 };
