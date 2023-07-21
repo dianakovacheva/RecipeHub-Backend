@@ -1,18 +1,28 @@
-const express = require("express");
+global.__basedir = __dirname;
+require('dotenv').config()
+const dbConnector = require('./config/db');
+// const mongoose = require('mongoose');
+const apiRouter = require('./router');
+const cors = require('cors');
+// const config = require('./config/config');
+const { errorHandler } = require('./utils');
 
-const expressConfig = require("./config/express");
-const databaseConfig = require("./config/database");
-const routesConfig = require("./config/routes");
+dbConnector()
+  .then(() => {
+    const config = require('./config/config');
 
-const port = 3000;
+    const app = require('express')();
+    require('./config/express')(app);
 
-start();
+    app.use(cors({
+      origin: config.origin,
+      credentials: true
+    }));
 
-async function start() {
-  const app = express();
-  expressConfig(app);
-  await databaseConfig(app);
-  routesConfig(app);
+    app.use('/api', apiRouter);
 
-  app.listen(port, () => console.log(`Server listening on port ${port}`));
-}
+    app.use(errorHandler);
+
+    app.listen(config.port, console.log(`Listening on port ${config.port}!`));
+  })
+  .catch(console.error);
