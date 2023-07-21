@@ -16,6 +16,10 @@ const commentSchema = new mongoose.Schema({
     type: ObjectId,
     ref: "Recipe",
   },
+  commentOwner: {
+    type: ObjectId,
+    ref: "User",
+  },
 });
 
 module.exports = mongoose.model("Comment", commentSchema);
