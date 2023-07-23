@@ -1,17 +1,15 @@
 const router = require("express").Router();
-const auth = require("./auth");
+const users = require("./users");
 const recipes = require("./recipes");
-const saves = require("./saves");
+// const saves = require("./saves");
 const { authController } = require("../controllers");
 
-router.use("/auth", auth);
-router.post("auth/register", authController.register);
-router.post("auth/login", authController.login);
-router.post("auth/logout", authController.logout);
-router.get("auth/user-profile", authController.getProfileInfo);
-router.put("auth/edit-user-profile", authController.editProfileInfo);
+router.post("/register", authController.register);
+router.post("/login", authController.login);
+router.post("/logout", authController.logout);
 
+router.use("/users", users);
 router.use("/recipes", recipes);
-router.use("/saves", saves);
+// router.use("/saves", saves);
 
 module.exports = router;
