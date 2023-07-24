@@ -5,6 +5,6 @@ const { recipeController } = require("../controllers");
 
 // middleware that is specific to this router
 
-router.put("/:recipeId", auth(), recipeController.likeRecipe);
+router.put("/recipes/details/:recipeId", auth(), recipeController.saveRecipe);
 
 module.exports = router;

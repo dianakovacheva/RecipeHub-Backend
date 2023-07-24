@@ -1,25 +1,25 @@
-const mongoose = require("mongoose");
-const { ObjectId } = mongoose.Schema.Types;
+const { Schema, model, Types } = require("mongoose");
 
-const commentSchema = new mongoose.Schema({
-  text: {
-    type: String,
-    trim: true,
-    required: true,
+const commentSchema = new Schema(
+  {
+    text: {
+      type: String,
+      required: true,
+      minlength: [10, "The comment must be at least 10 characters long."],
+      maxlength: [50, "The comment must be no longer than 50 characters."],
+    },
+    commentOwner: {
+      type: Types.ObjectId,
+      ref: "User",
+    },
+    commentedRecipe: {
+      type: Types.ObjectId,
+      ref: "Recipe",
+    },
   },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
-  // each comment can only relates to one blog, so it's not in array
-  recipe: {
-    type: ObjectId,
-    ref: "Recipe",
-  },
-  commentOwner: {
-    type: ObjectId,
-    ref: "User",
-  },
-});
+  { timestamps: { createdAt: "created_at" } }
+);
 
-module.exports = mongoose.model("Comment", commentSchema);
+const Comment = model("Comment", commentSchema);
+
+module.exports = Comment;

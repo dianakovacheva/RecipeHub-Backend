@@ -1,96 +1,51 @@
-const { recipeModel } = require("../models/recipeModel");
+const { Recipe, User, Comment } = require("../models");
+const { newComment } = require("./commentController");
 
-async function getAllRecipes(req, res, next) {
-  return await recipeModel
-    .find({})
-    .lean()
+function getAllRecipes(req, res, next) {
+  Recipe.find()
     .populate("userId")
-    .then((allRecipes) => res.json(allRecipes))
+    .then((recipes) => res.json(recipes))
     .catch(next);
 }
 
-async function getRecipeById(req, res, next) {
-  const { recipeId } = req.params; //TODO: Adjust the recipe ID info
+function getRecipeById(req, res, next) {
+  const { recipeId } = req.params;
 
-  return await recipeModel
-    .findById(recipeId) //TODO: Adjust the recipe ID info
-    .lean()
+  Recipe.findById(recipeId)
     .populate({
+      path: "commentsList",
       populate: {
         path: "userId",
       },
     })
-    .then((foundRecipe) => {
-      if (foundRecipe) {
-        res.status(200).json(foundRecipe);
-      } else {
-        res.status(404).json({ message: "Recipe not found" });
-      }
-    })
+    .then((foundRecipe) => res.json(foundRecipe))
     .catch(next);
 }
 
-async function createRecipe(req, res, next) {
-  const recipe = new recipeModel({
-    title: req.body.title,
-    author: req.body.title,
-    preparationMinutes: req.body.preparationMinutes,
-    cookingMinutes: req.body.cookingMinutes,
-    servings: req.body.servings,
-    pricePerServing: req.body.pricePerServing,
-    image: req.body.image, //TODO: Adjust this part of the recipe model
-    summary: req.body.summary,
-    dishTypes: req.body.dishTypes, //TODO: Adjust this part of the recipe model
-    extendedIngredients: req.body.extendedIngredients,
-    analyzedInstructions: req.body.analyzedInstructions,
-    likes: req.body.likes,
-    comments: req.body.comments,
-  });
-
+function createRecipe(req, res, next) {
+  const { recipeName, commentText } = req.body;
   const { _id: userId } = req.user;
 
-  return await recipeModel
-    .create({
-      recipe,
-      userId,
-      likes: [userId],
-      comments: [userId],
-    })
+  Recipe.create({ recipeName, userId, recipeOwner: [userId] })
     .then((createdRecipe) => {
-      res.status(200).json(createdRecipe);
+      newComment(commentText, userId, createdRecipe._id).then(
+        ([_, updatedRecipe]) => res.status(200).json(updatedRecipe)
+      );
     })
     .catch(next);
 }
 
-async function editRecipe(req, res, next) {
+function editRecipe(req, res, next) {
   const { recipeId } = req.params;
-  const existingRecipe = await recipeModel.findById(recipeId);
+  const { recipeTitle } = req.body;
   const { _id: userId } = req.user;
-
-  // Update recipe fields
-  existingRecipe.title = req.body.title;
-  existingRecipe.author = req.body.author;
-  existingRecipe.preparationMinutes = req.body.preparationMinutes;
-  existingRecipe.cookingMinutes = req.body.cookingMinutes;
-  existingRecipe.servings = req.body.servings;
-  existingRecipe.pricePerServing = req.body.pricePerServing;
-  existingRecipe.image = req.body.image; //TODO: Adjust this part of the recipe model
-  existingRecipe.summary = req.body.summary;
-  existingRecipe.dishTypes = req.body.dishTypes; //TODO: Adjust this part of the recipe model
-  existingRecipe.extendedIngredients = req.body.extendedIngredients;
-  existingRecipe.analyzedInstructions = req.body.analyzedInstructions;
-  existingRecipe.likes = req.body.likes;
-  existingRecipe.comments = req.body.comments;
-
-  const updatedRecipe = await existingRecipe.save();
 
   // if the userId is not the same as this one of the post, the post will not be updated
-  return await recipeModel
-    .findOneAndUpdate(
-      { _id: recipeId, userId },
-      { recipe: updatedRecipe }, //TODO: Adjust the content of the updated recipe
-      { new: true }
-    )
+  Recipe.findOneAndUpdate(
+    { _id: recipeId, userId },
+    { title: recipeTitle },
+    { new: true }
+  )
     .then((updatedRecipe) => {
       if (updatedRecipe) {
         res.status(200).json(updatedRecipe);
@@ -102,18 +57,18 @@ async function editRecipe(req, res, next) {
 }
 
 function deleteRecipe(req, res, next) {
-  const { recipeId } = req.params;
+  const { recipeId, commentId } = req.params;
   const { _id: userId } = req.user;
 
   Promise.all([
-    recipeModel.findOneAndDelete({ _id: recipeId, userId }),
-    userModel.findOneAndUpdate(
+    Recipe.findOneAndDelete({ _id: recipeId, userId }),
+    User.findOneAndUpdate(
       { _id: userId },
-      { $pull: { recipes: recipeId } }
+      { $pull: { userRecipesList: recipeId } }
     ),
-    recipeModel.findOneAndUpdate(
-      { _id: recipeId },
-      { $pull: { createdRecipes: recipeId } }
+    Comment.findOneAndUpdate(
+      { _id: commentId },
+      { $pull: { commentedRecipe: recipeId } }
     ),
   ])
     .then(([deletedOne, _, __]) => {
@@ -126,37 +81,18 @@ function deleteRecipe(req, res, next) {
     .catch(next);
 }
 
-async function likeRecipe(req, res, next) {
-  const { recipeId } = req.params;
+function saveRecipe(req, res, next) {
+  const { recipesId } = req.params;
   const { _id: userId } = req.user;
 
-  console.log("like");
+  console.log("save");
 
-  return await recipeModel
-    .updateOne(
-      { _id: recipeId },
-      { $addToSet: { likes: userId } },
-      { new: true }
-    )
-    .then(() => res.status(200).json({ message: "Liked successful!" }))
-    .catch(next);
-}
-
-async function addCommentToRecipe(req, res, next) {
-  const recipeId = req.params.recipeId;
-  const commentText = req.body;
-  const { _id: userId } = req.user;
-
-  return await recipeModel
-    .findByIdAndUpdate(
-      { _id: recipeId },
-      { comment: commentText },
-      { $addToSet: { comments: userId } },
-      { new: true }
-    )
-    .then((commentedRecipe) => {
-      res.status(200).json(commentedRecipe);
-    })
+  Recipe.updateOne(
+    { _id: recipesId },
+    { $addToSet: { saves: userId } },
+    { new: true }
+  )
+    .then(() => res.status(200).json({ message: "Saved successful!" }))
     .catch(next);
 }
 
@@ -166,6 +102,5 @@ module.exports = {
   createRecipe,
   editRecipe,
   deleteRecipe,
-  likeRecipe,
-  addCommentToRecipe,
+  saveRecipe,
 };

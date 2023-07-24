@@ -1,105 +1,134 @@
-const mongoose = require("mongoose");
-const { ObjectId } = mongoose.Schema.Types;
+const { Schema, model, Types } = require("mongoose");
 
 const URL_PATTERN =
   /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/i;
 
-const recipeSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    trim: true,
-    require: true,
-  },
-  author: {
-    type: ObjectId,
-    ref: "User",
-  },
-  preparationMinutes: {
-    type: Number,
-    required: true,
-  },
-  cookingMinutes: {
-    type: Number,
-    required: true,
-  },
-  servings: {
-    type: Number,
-    required: true,
-  },
-  pricePerServing: {
-    type: Number,
-  },
-  image: {
-    type: String,
-    required: true,
-    validate: {
-      validator: (value) => URL_PATTERN.test(value),
-      message: "Invalid URL ",
+const recipeSchema = new Schema(
+  {
+    title: {
+      type: String,
+      trim: true,
+      require: true,
+      minlength: [2, "The title must be at least 2 characters long."],
     },
-  },
-  summary: {
-    type: String,
-    trim: true,
-    required: true,
-  },
-  dishTypes: [
-    {
+    author: {
+      type: Types.ObjectId,
+      ref: "User",
+      minlength: [2, "The author must be at least 2 characters long."],
+    },
+    preparationMinutes: {
+      type: Number,
+      required: true,
+      min: [1, "The preparation minutes must begin from 1."],
+    },
+    cookingMinutes: {
+      type: Number,
+      required: true,
+      min: [1, "The cooking minutes must begin from 1."],
+    },
+    servings: {
+      type: Number,
+      required: true,
+      min: [1, "The servings must begin from 1."],
+    },
+    pricePerServing: {
+      type: Number,
+      min: [0, "The price per serving must be a positive number."],
+    },
+    image: {
+      type: String,
+      required: true,
+      validate: {
+        validator: (value) => URL_PATTERN.test(value),
+        message: "Invalid URL.",
+      },
+    },
+    summary: {
       type: String,
       trim: true,
       required: true,
+      minlength: [5, "The summary must be at least 5 characters long."],
+      maxlength: [100, "The summary must be no longer than 100 characters."],
     },
-  ],
-  extendedIngredients: [
-    {
-      name: {
+    dishTypes: [
+      {
         type: String,
         trim: true,
         required: true,
+        minlength: [2, "The dish type must be at least 2 characters long."],
+        enum: ["lunch", "main course", "main dish", "dinner"],
       },
-      measures: {
-        metric: {
-          amount: {
-            type: Number,
-            required: true,
-          },
-          unitLong: {
-            type: String,
-            trim: true,
-            required: true,
-          },
-        },
-      },
-    },
-  ],
-  analyzedInstructions: [
-    {
-      steps: {
-        number: {
-          type: Number,
-          required: true,
-        },
-        step: {
+    ],
+    extendedIngredients: [
+      {
+        name: {
           type: String,
           trim: true,
           required: true,
+          minlength: [
+            2,
+            "The ingredient's name must be at least 2 characters long.",
+          ],
+        },
+        measures: {
+          metric: {
+            amount: {
+              type: Number,
+              required: true,
+              min: [0, "The amount must be a positive number."],
+            },
+            unitLong: {
+              type: String,
+              trim: true,
+              required: true,
+              minlength: [1, "The unit must be at least 1 character long."],
+            },
+          },
         },
       },
-    },
-  ],
-  likes: [
-    {
-      type: ObjectId,
+    ],
+    analyzedInstructions: [
+      {
+        steps: {
+          number: {
+            type: Number,
+            required: true,
+            min: [1, "The number of the steps must begin from 1."],
+          },
+          step: {
+            type: String,
+            trim: true,
+            required: true,
+            minlength: [
+              10,
+              "The step's description must be at least 10 characters long.",
+            ],
+            maxlength: [
+              100,
+              "The step's description must be no longer than 100 characters.",
+            ],
+          },
+        },
+      },
+    ],
+    recipeOwner: {
+      type: Types.ObjectId,
       ref: "User",
     },
-  ],
-  // a blog post can have multiple comments, so it should be in a array.
-  // all comments info should be kept in this array of this blog post.
-  comments: [
-    {
-      type: ObjectId,
+    commentsList: {
+      type: [Types.ObjectId],
       ref: "Comment",
     },
-  ],
-});
+    saves: [
+      {
+        type: [Types.ObjectId],
+        ref: "User",
+      },
+    ],
+  },
+  { timestamps: { createdAt: "created_at" } }
+);
 
-module.exports = mongoose.model("Recipe", recipeSchema);
+const Recipe = model("Recipe", recipeSchema);
+
+module.exports = Recipe;

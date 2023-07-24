@@ -1,14 +1,14 @@
-const mongoose = require("mongoose");
+const { Schema, model, Types } = require("mongoose");
 const bcrypt = require("bcrypt");
 const saltRounds = Number(process.env.SALTROUNDS) || 5;
 
-const { ObjectId } = mongoose.Schema.Types;
+const EMAIL_PATTERN = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   firstName: {
     type: String,
     required: true,
-    minlength: [2, "First name must be min 2 chars long."],
+    minlength: [2, "The first name must be at least 2 characters long."],
     validate: {
       validator: function (v) {
         return /[a-zA-Z]+/g.test(v);
@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
   lastName: {
     type: String,
     required: true,
-    minlength: [2, "Last name must be min 2 chars long."],
+    minlength: [2, "The last name must be at least 2 characters long."],
     validate: {
       validator: function (v) {
         return /[a-zA-Z]+/g.test(v);
@@ -31,11 +31,16 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    minlength: [10, "The email must be at least 10 characters long."],
+    validate: {
+      validator: (value) => EMAIL_PATTERN.test(value),
+      message: "Invalid email address.",
+    },
   },
   password: {
     type: String,
     required: true,
-    minlength: [8, "Password must be at least 8 characters."],
+    minlength: [8, "The Password must be at least 8 characters long."],
     validate: {
       validator: function (v) {
         return /[a-zA-Z0-9]+/g.test(v);
@@ -44,22 +49,22 @@ const userSchema = new mongoose.Schema({
         `${props.value} must contains only latin letters and digits!`,
     },
   },
-  createdRecipes: [
+  userRecipesList: [
     {
-      type: ObjectId,
+      type: [Types.ObjectId],
       ref: "Recipe",
     },
   ],
-  savedRecipes: [
+  userCommentsList: [
     {
-      type: ObjectId,
+      type: [Types.ObjectId],
       ref: "Recipe",
     },
   ],
-  userCommentedRecipes: [
+  userSavedRecipes: [
     {
-      type: ObjectId,
-      ref: "Comment",
+      type: [Types.ObjectId],
+      ref: "Recipe",
     },
   ],
 });
@@ -70,23 +75,29 @@ userSchema.methods = {
   },
 };
 
-userSchema.pre("save", function (next) {
-  if (this.isModified("password")) {
-    bcrypt.genSalt(saltRounds, (err, salt) => {
-      if (err) {
-        next(err);
-      }
-      bcrypt.hash(this.password, salt, (err, hash) => {
+userSchema.pre(
+  "save",
+  function (next) {
+    if (this.isModified("password")) {
+      bcrypt.genSalt(saltRounds, (err, salt) => {
         if (err) {
           next(err);
         }
-        this.password = hash;
-        next();
+        bcrypt.hash(this.password, salt, (err, hash) => {
+          if (err) {
+            next(err);
+          }
+          this.password = hash;
+          next();
+        });
       });
-    });
-    return;
-  }
-  next();
-});
+      return;
+    }
+    next();
+  },
+  { timestamps: { createdAt: "created_at" } }
+);
 
-module.exports = mongoose.model("User", userSchema);
+const User = model("User", userSchema);
+
+module.exports = User;
