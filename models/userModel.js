@@ -32,7 +32,6 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-    minlength: [10, "The email must be at least 10 characters long."],
     validate: {
       validator: (value) => EMAIL_PATTERN.test(value),
       message: "Invalid email address.",
