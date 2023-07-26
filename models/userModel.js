@@ -14,7 +14,7 @@ const userSchema = new Schema({
       validator: function (v) {
         return /[a-zA-Z]+/g.test(v);
       },
-      message: (props) => `${props.value} must contains only latin letters!`,
+      message: (props) => `${props.value} must contain only latin letters!`,
     },
   },
   lastName: {
@@ -25,7 +25,7 @@ const userSchema = new Schema({
       validator: function (v) {
         return /[a-zA-Z]+/g.test(v);
       },
-      message: (props) => `${props.value} must contains only latin letters!`,
+      message: (props) => `${props.value} must contain only latin letters!`,
     },
   },
   email: {
@@ -46,7 +46,7 @@ const userSchema = new Schema({
         return /[a-zA-Z0-9]+/g.test(v);
       },
       message: (props) =>
-        `${props.value} must contains only latin letters and digits!`,
+        `${props.value} must contain only latin letters and digits!`,
     },
   },
   userRecipesList: [
