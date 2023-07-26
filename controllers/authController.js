@@ -118,7 +118,6 @@ function editProfileInfo(req, res, next) {
 
 module.exports = {
   login,
-  getRegister,
   register,
   logout,
   getProfileInfo,
