@@ -5,6 +5,10 @@ const URL_PATTERN =
 
 const recipeSchema = new Schema(
   {
+    recipeApiID: {
+      type: String,
+      trim: true,
+    },
     title: {
       type: String,
       trim: true,
