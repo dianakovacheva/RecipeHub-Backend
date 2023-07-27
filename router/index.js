@@ -1,14 +1,10 @@
 const router = require("express").Router();
 const users = require("./users");
-const recipes = require("./recipes");
-const saves = require("./saves");
-const { authController } = require("../controllers");
-
-router.post("/register", authController.register);
-router.post("/login", authController.login);
-router.post("/logout", authController.logout);
+const auth = require("./auth");
 
 router.use("/users", users);
+router.use("/auth", auth);
+
 // router.use("/recipes", recipes);
 // router.use("/saved-recipes", saves);
 
