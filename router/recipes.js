@@ -6,7 +6,7 @@ const { recipeController, commentController } = require("../controllers");
 // middleware that is specific to this router
 
 // Recipe router
-router.get("/", recipeController.getAllRecipes);
+
 router.post("/create-recipe", auth(), recipeController.createRecipe);
 router.get("/details/:recipeId", recipeController.getRecipeById);
 // router.get("/recipes/details/:recipeId/edit", recipeController.editRecipe);
@@ -26,5 +26,7 @@ router.delete(
   auth(),
   commentController.deleteComment
 );
+
+router.get("/", recipeController.getAllRecipes);
 
 module.exports = router;
