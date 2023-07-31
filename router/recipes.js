@@ -9,9 +9,12 @@ const { recipeController, commentController } = require("../controllers");
 
 router.post("/create-recipe", auth(), recipeController.createRecipe);
 router.get("/details/:recipeId", recipeController.getRecipeById);
-// router.get("/recipes/details/:recipeId/edit", recipeController.editRecipe);
-router.put("/details/:recipeId/edit", recipeController.editRecipe);
-router.delete("/details/:recipeId/delete", recipeController.deleteRecipe);
+router.put("/details/:recipeId/edit", auth(), recipeController.editRecipe);
+router.delete(
+  "/details/:recipeId/delete",
+  auth(),
+  recipeController.deleteRecipe
+);
 
 // Comment router
 router.post("/details/:recipeId", auth(), commentController.createComment);
