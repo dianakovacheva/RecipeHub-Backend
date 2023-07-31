@@ -14,11 +14,11 @@ const recipeSchema = new Schema(
       trim: true,
       require: true,
       minlength: [2, "The title must be at least 2 characters long."],
+      maxlength: [100, "The title must be no longer than 100 characters."],
     },
     author: {
       type: Types.ObjectId,
       ref: "User",
-      minlength: [2, "The author must be at least 2 characters long."],
     },
     preparationMinutes: {
       type: Number,
@@ -52,14 +52,13 @@ const recipeSchema = new Schema(
       trim: true,
       required: true,
       minlength: [5, "The summary must be at least 5 characters long."],
-      maxlength: [100, "The summary must be no longer than 100 characters."],
+      maxlength: [500, "The summary must be no longer than 500 characters."],
     },
     dishTypes: [
       {
         type: String,
         trim: true,
         required: true,
-        minlength: [2, "The dish type must be at least 2 characters long."],
         enum: ["lunch", "main course", "main dish", "dinner"],
       },
     ],
@@ -104,13 +103,13 @@ const recipeSchema = new Schema(
             trim: true,
             required: true,
             minlength: [
-              10,
-              "The step's description must be at least 10 characters long.",
+              2,
+              "The step's description must be at least 2 characters long.",
             ],
-            maxlength: [
-              100,
-              "The step's description must be no longer than 100 characters.",
-            ],
+            // maxlength: [
+            //   1000,
+            //   "The step's description must be no longer than 1000 characters.",
+            // ],
           },
         },
       },
