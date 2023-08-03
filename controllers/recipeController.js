@@ -53,7 +53,7 @@ function createRecipe(req, res) {
 // Get All Recipes
 function getAllRecipes(req, res) {
   Recipe.find()
-    .populate("userId")
+    .populate({ path: "author", select: "firstName lastName" })
     .then((foundRecipes) => {
       if (foundRecipes) {
         res.status(200).json(foundRecipes);
@@ -71,9 +71,17 @@ function getRecipeById(req, res, next) {
   const { recipeId } = req.params;
 
   Recipe.findById(recipeId)
-    .populate("userId")
-    .then((foundRecipe) => res.json(foundRecipe))
-    .catch(next);
+    .populate({ path: "author", select: "firstName lastName" })
+    .then((foundRecipe) => {
+      if (foundRecipe) {
+        res.status(200).json(foundRecipe);
+      } else {
+        res.status(401).json({ message: `Not allowed!` });
+      }
+    })
+    .catch((error) => {
+      res.status(500).json(error);
+    });
 }
 
 // Edit Recipe
