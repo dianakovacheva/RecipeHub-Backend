@@ -16,23 +16,29 @@ function createRecipe(req, res) {
   } = req.body;
   const { _id: userId } = req.user;
 
+  parsedIngredients = JSON.parse(extendedIngredients);
+  parsedSteps = JSON.parse(analyzedInstructions);
+
+  let convertedImageUrl = imageURL;
+  if (imageURL == "") {
+    convertedImageUrl = undefined;
+  }
+
   Recipe.create({
     title,
     summary,
-    imageURL,
+    imageURL: convertedImageUrl,
     preparationMinutes,
     cookingMinutes,
     servings,
     pricePerServing,
     dishTypes,
-    extendedIngredients,
-    analyzedInstructions,
-    userId,
+    extendedIngredients: parsedIngredients,
+    analyzedInstructions: parsedSteps,
     author: [userId],
   })
     .then((createdRecipe) => {
       if (createdRecipe) {
-        res.status(200).json(createdRecipe);
         return Promise.all([
           User.updateOne(
             { _id: userId },
@@ -40,7 +46,7 @@ function createRecipe(req, res) {
               $push: { userRecipesList: createdRecipe._id },
             }
           ),
-        ]);
+        ]).then(res.status(200).json(createdRecipe));
       } else {
         res.status(401).json({ message: `Not allowed!` });
       }
@@ -101,20 +107,28 @@ function editRecipe(req, res) {
     analyzedInstructions,
   } = req.body;
 
+  parsedIngredients = JSON.parse(extendedIngredients);
+  parsedSteps = JSON.parse(analyzedInstructions);
+
+  let convertedImageUrl = imageURL;
+  if (imageURL == "") {
+    convertedImageUrl = undefined;
+  }
+
   // if the userId is not the same as this one of the post, the post will not be updated
   Recipe.findOneAndUpdate(
     { _id: recipeId, author: userId },
     {
       title: title,
       summary: summary,
-      imageURL: imageURL,
+      imageURL: convertedImageUrl,
       preparationMinutes: preparationMinutes,
       cookingMinutes: cookingMinutes,
       servings: servings,
       pricePerServing: pricePerServing,
       dishTypes: dishTypes,
-      extendedIngredients: extendedIngredients,
-      analyzedInstructions: analyzedInstructions,
+      extendedIngredients: parsedIngredients,
+      analyzedInstructions: parsedSteps,
     }
   )
     .then((updatedRecipe) => {
@@ -177,16 +191,22 @@ function saveRecipe(req, res, next) {
       }
     ),
   ])
-    .then(() => res.status(200).json({ message: "Saved successful!" }))
+    .then((savedRecipe) => {
+      if (savedRecipe) {
+        res.status(200).json(savedRecipe, { message: "Recipe saved!" });
+      } else {
+        res.status(401).json({ message: `Not allowed!` });
+      }
+    })
     .catch((error) => {
       res.status(500).json(error);
     });
 }
 
 module.exports = {
+  createRecipe,
   getAllRecipes,
   getRecipeById,
-  createRecipe,
   editRecipe,
   deleteRecipe,
   saveRecipe,
