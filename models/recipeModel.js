@@ -41,7 +41,6 @@ const recipeSchema = new Schema(
     },
     imageURL: {
       type: String,
-      required: true,
       validate: {
         validator: (value) => IMAGE_URL_PATTERN.test(value),
         message: "Invalid URL.",
