@@ -152,7 +152,7 @@ function deleteRecipe(req, res) {
     Recipe.findOneAndDelete({ _id: recipeId, author: userId }),
     User.findOneAndUpdate(
       { _id: userId },
-      { $pull: { userRecipesList: recipeId } }
+      { $pull: { userRecipesList: recipeId, userSavedRecipes: recipeId } }
     ),
     // Comment.findOneAndUpdate(
     //   { _id: commentId },
