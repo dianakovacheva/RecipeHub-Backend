@@ -1,9 +1,9 @@
 const router = require("express").Router();
-const users = require("./users");
+const user = require("./user");
 const auth = require("./auth");
 const recipes = require("./recipes");
 
-router.use("/users", users);
+router.use("/user", user);
 router.use("/auth", auth);
 router.use("/recipes", recipes);
 
