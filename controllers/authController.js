@@ -36,7 +36,6 @@ const register = (req, res, next) => {
         let field = err.message.split("index: ")[1];
         field = field.split(" dup key")[0];
         field = field.substring(0, field.lastIndexOf("_"));
-
         res
           .status(409)
           .send({ message: `This ${field} is already registered!` });
@@ -94,11 +93,11 @@ function logout(req, res) {
 function getProfileInfo(req, res, next) {
   const { _id: userId } = req.user;
 
-  User.findOne({ _id: userId }, { password: 0, __v: 0 }) //finding by Id and returning without password and __v
+  User.findOne({ _id: userId }, { password: 0, __v: 0 })
     .then((user) => {
       res.status(200).json(user);
     })
-    .catch(next);
+    .catch((err) => res.send(err));
 }
 
 function editProfileInfo(req, res, next) {
@@ -113,7 +112,40 @@ function editProfileInfo(req, res, next) {
     .then((x) => {
       res.status(200).json(x);
     })
-    .catch(next);
+    .catch((err) => res.send(err));
+}
+
+function getUserRecipesList(req, res, next) {
+  const { _id: userId } = req.user;
+
+  User.findById({ _id: userId }, { password: 0, __v: 0 })
+    .populate("userRecipesList")
+    .then((foundUser) => {
+      res.status(200).json(foundUser.userRecipesList);
+    })
+    .catch((err) => res.send(err));
+}
+
+function getUserSavedRecipesList(req, res, next) {
+  const { _id: userId } = req.user;
+
+  User.findById({ _id: userId }, { password: 0, __v: 0 })
+    .populate("userSavedRecipes")
+    .then((foundUser) => {
+      res.status(200).json(foundUser.userSavedRecipes);
+    })
+    .catch((err) => res.send(err));
+}
+
+function getUserCommentsList(req, res, next) {
+  const { _id: userId } = req.user;
+
+  User.findById({ _id: userId }, { password: 0, __v: 0 })
+    .populate("userCommentsList")
+    .then((foundUser) => {
+      res.status(200).json(foundUser.userCommentsList);
+    })
+    .catch((err) => res.send(err));
 }
 
 module.exports = {
@@ -122,4 +154,7 @@ module.exports = {
   logout,
   getProfileInfo,
   editProfileInfo,
+  getUserRecipesList,
+  getUserSavedRecipesList,
+  getUserCommentsList,
 };
