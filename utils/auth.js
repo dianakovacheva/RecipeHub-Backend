@@ -15,7 +15,7 @@ function auth(redirectUnauthenticated = true) {
         }
         User.findById(data.id).then((user) => {
           req.user = user;
-          req.isLogged = true;
+          req.isLoggedIn = true;
           next();
         });
       })
