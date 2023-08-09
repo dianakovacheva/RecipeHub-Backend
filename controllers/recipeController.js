@@ -176,12 +176,10 @@ function saveRecipe(req, res, next) {
   const { recipeId } = req.params;
   const { _id: userId } = req.user;
 
-  console.log("save");
-
   return Promise.all([
     Recipe.updateOne(
       { _id: recipeId },
-      { $addToSet: { saves: userId } },
+      { $addToSet: { savesList: userId } },
       { new: true }
     ),
     User.updateOne(
@@ -191,12 +189,8 @@ function saveRecipe(req, res, next) {
       }
     ),
   ])
-    .then((savedRecipe) => {
-      if (savedRecipe) {
-        res.status(200).json(savedRecipe, { message: "Recipe saved!" });
-      } else {
-        res.status(401).json({ message: `Not allowed!` });
-      }
+    .then(() => {
+      res.status(200).json({ message: "Recipe saved successfully!" });
     })
     .catch((error) => {
       res.status(500).json(error);
