@@ -118,7 +118,7 @@ const recipeSchema = new Schema(
       type: [Types.ObjectId],
       ref: "Comment",
     },
-    saves: [
+    savesList: [
       {
         type: [Types.ObjectId],
         ref: "User",
