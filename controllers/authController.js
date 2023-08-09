@@ -95,7 +95,7 @@ function getProfileInfo(req, res, next) {
 
   User.findOne({ _id: userId }, { password: 0, __v: 0 })
     .then((user) => {
-      res.status(200).json(user);
+      res.status(200).send(bsonToJson(user));
     })
     .catch((err) => res.send(err));
 }
