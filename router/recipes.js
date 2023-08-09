@@ -6,15 +6,15 @@ const { recipeController, commentController } = require("../controllers");
 // middleware that is specific to this router
 
 // Recipe router
-
 router.post("/create-recipe", auth(), recipeController.createRecipe);
-router.get("/details/:recipeId", recipeController.getRecipeById);
 router.put("/details/:recipeId/edit", auth(), recipeController.editRecipe);
+router.put("/details/:recipeId/save", auth(), recipeController.saveRecipe);
 router.delete(
   "/details/:recipeId/delete",
   auth(),
   recipeController.deleteRecipe
 );
+router.get("/details/:recipeId", recipeController.getRecipeById);
 
 // Comment router
 router.post("/details/:recipeId", auth(), commentController.createComment);
