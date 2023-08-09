@@ -109,8 +109,8 @@ function editProfileInfo(req, res, next) {
     { firstName, lastName, email },
     { runValidators: true, new: true }
   )
-    .then((x) => {
-      res.status(200).json(x);
+    .then((udpatedProfileInfo) => {
+      res.status(200).json(bsonToJson(udpatedProfileInfo));
     })
     .catch((err) => res.send(err));
 }
