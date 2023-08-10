@@ -58,7 +58,7 @@ const userSchema = new Schema({
   userCommentsList: [
     {
       type: [Types.ObjectId],
-      ref: "Recipe",
+      ref: "Comment",
     },
   ],
   userSavedRecipes: [
