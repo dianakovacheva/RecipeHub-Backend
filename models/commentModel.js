@@ -2,11 +2,11 @@ const { Schema, model, Types } = require("mongoose");
 
 const commentSchema = new Schema(
   {
-    text: {
+    comment: {
       type: String,
       required: true,
-      minlength: [10, "The comment must be at least 10 characters long."],
-      maxlength: [50, "The comment must be no longer than 50 characters."],
+      minlength: [2, "The comment must be at least 2 characters long."],
+      maxlength: [500, "The comment must be no longer than 500 characters."],
     },
     commentOwner: {
       type: Types.ObjectId,
