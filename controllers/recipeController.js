@@ -154,10 +154,10 @@ function deleteRecipe(req, res) {
       { _id: userId },
       { $pull: { userRecipesList: recipeId, userSavedRecipes: recipeId } }
     ),
-    // Comment.findOneAndUpdate(
-    //   { _id: commentId },
-    //   { $pull: { commentedRecipe: recipeId } }
-    // ),
+    Comment.findOneAndDelete(
+      { commentedRecipe: recipeId },
+      { $pull: { commentedRecipe: recipeId } }
+    ),
   ])
     .then(([deletedOne, _]) => {
       if (deletedOne) {
@@ -197,6 +197,50 @@ function saveRecipe(req, res, next) {
     });
 }
 
+// Remove Saved Recipe
+function removeSavedRecipe(req, res, next) {
+  const { recipeId } = req.params;
+  const { _id: userId } = req.user;
+
+  return Promise.all([
+    Recipe.updateOne(
+      { _id: recipeId },
+      { $pull: { savesList: userId } },
+      { new: true }
+    ),
+    User.updateOne(
+      { _id: userId },
+      {
+        $pull: { userSavedRecipes: recipeId },
+      }
+    ),
+  ])
+    .then(() => {
+      res.status(200).json({ message: "Recipe removed successfully!" });
+    })
+    .catch((error) => {
+      res.status(500).json(error);
+    });
+}
+
+// Get Recipe Comments
+function getRecipeComments(req, res, next) {
+  const { recipeId } = req.params;
+
+  Comment.find({ commentedRecipe: recipeId })
+    .populate({ path: "commentAuthor", select: "firstName lastName" })
+    .then((foundComments) => {
+      if (foundComments) {
+        res.status(200).json(foundComments);
+      } else {
+        res.status(401).json({ message: `Not allowed!` });
+      }
+    })
+    .catch((error) => {
+      res.status(500).json(error);
+    });
+}
+
 module.exports = {
   createRecipe,
   getAllRecipes,
@@ -204,4 +248,6 @@ module.exports = {
   editRecipe,
   deleteRecipe,
   saveRecipe,
+  removeSavedRecipe,
+  getRecipeComments,
 };
