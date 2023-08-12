@@ -34,6 +34,8 @@ router.delete(
   auth(),
   commentController.deleteRecipeComment
 );
+// Search route
+router.get("/search", recipeController.search);
 
 router.get("/details/:recipeId", recipeController.getRecipeById);
 router.get("/", recipeController.getAllRecipes);

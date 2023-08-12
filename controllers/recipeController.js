@@ -241,6 +241,30 @@ function getRecipeComments(req, res, next) {
     });
 }
 
+function search(req, res, next) {
+  const query = req.query.search;
+  const regExpQuery = new RegExp(query, "i"); // 'i' flag for case-insensitive search
+
+  Recipe.find({
+    $or: [
+      { title: regExpQuery },
+      { summary: regExpQuery },
+      { "extendedIngredients.name": regExpQuery },
+    ],
+  })
+    .populate({ path: "author", select: "firstName lastName" })
+    .then((foundRecipes) => {
+      if (foundRecipes) {
+        res.status(200).json(foundRecipes);
+      } else {
+        res.status(401).json({ message: `Not allowed!` });
+      }
+    })
+    .catch((error) => {
+      res.status(500).json(error);
+    });
+}
+
 module.exports = {
   createRecipe,
   getAllRecipes,
@@ -250,4 +274,5 @@ module.exports = {
   saveRecipe,
   removeSavedRecipe,
   getRecipeComments,
+  search,
 };
