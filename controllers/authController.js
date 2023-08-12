@@ -1,4 +1,4 @@
-const { User, tokenBlacklistModel } = require("../models");
+const { User, tokenBlacklistModel, Comment } = require("../models");
 
 const utils = require("../utils");
 const { authCookieName } = require("../app-config");
@@ -140,10 +140,11 @@ function getUserSavedRecipesList(req, res, next) {
 function getUserCommentsList(req, res, next) {
   const { _id: userId } = req.user;
 
-  User.findById({ _id: userId }, { password: 0, __v: 0 })
-    .populate("userCommentsList")
-    .then((foundUser) => {
-      res.status(200).json(foundUser.userCommentsList);
+  Comment.find({ commentAuthor: userId })
+    .populate({ path: "commentedRecipe", select: "title" })
+    .then((foundComments) => {
+      console.log(foundComments);
+      res.status(200).json(foundComments);
     })
     .catch((err) => res.send(err));
 }
