@@ -1,7 +1,6 @@
 const { User, Recipe, Comment } = require("../models");
 
 // Comment Recipe
-
 function commentRecipe(req, res, next) {
   const { recipeId } = req.params;
   const { _id: userId } = req.user;
@@ -61,31 +60,35 @@ function commentRecipe(req, res, next) {
 //     .catch(next);
 // }
 
-// function deleteComment(req, res, next) {
-//   const { commentId, recipesId } = req.params;
-//   const { _id: userId } = req.user;
+// Delete Recipe Comment
+function deleteRecipeComment(req, res, next) {
+  const { commentId, recipeId } = req.params;
+  const { _id: userId } = req.user;
 
-//   Promise.all([
-//     Comment.findOneAndDelete({ _id: commentId, userId }),
-//     User.findOneAndUpdate(
-//       { _id: userId },
-//       { $pull: { userCommentsList: commentId } }
-//     ),
-//     Recipe.findOneAndUpdate(
-//       { _id: recipesId },
-//       { $pull: { commentsList: commentId } }
-//     ),
-//   ])
-//     .then(([deletedOne, _, __]) => {
-//       if (deletedOne) {
-//         res.status(200).json(deletedOne);
-//       } else {
-//         res.status(401).json({ message: `Not allowed!` });
-//       }
-//     })
-//     .catch(next);
-// }
+  Promise.all([
+    Comment.findOneAndDelete({ _id: commentId, commentAuthor: userId }),
+    User.findOneAndUpdate(
+      { _id: userId },
+      { $pull: { userCommentsList: commentId } }
+    ),
+    Recipe.findOneAndUpdate(
+      { _id: recipeId },
+      { $pull: { commentsList: commentId } }
+    ),
+  ])
+    .then(([deletedOne, _, __]) => {
+      if (deletedOne) {
+        res.status(200).json(deletedOne);
+      } else {
+        res.status(401).json({ message: `Not allowed!` });
+      }
+    })
+    .catch((error) => {
+      res.status(500).json(error);
+    });
+}
 
 module.exports = {
   commentRecipe,
+  deleteRecipeComment,
 };
