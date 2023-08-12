@@ -29,11 +29,11 @@ router.post(
 //   auth(),
 //   commentController.editComment
 // );
-// router.delete(
-//   "/details/:recipeId/comments/:commentId",
-//   auth(),
-//   commentController.deleteComment
-// );
+router.delete(
+  "/details/:recipeId/comments/:commentId",
+  auth(),
+  commentController.deleteRecipeComment
+);
 
 router.get("/details/:recipeId", recipeController.getRecipeById);
 router.get("/", recipeController.getAllRecipes);
