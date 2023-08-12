@@ -105,10 +105,6 @@ const recipeSchema = new Schema(
                 2,
                 "The step's description must be at least 2 characters long.",
               ],
-              // maxlength: [
-              //   1000,
-              //   "The step's description must be no longer than 1000 characters.",
-              // ],
             },
           },
         ],
