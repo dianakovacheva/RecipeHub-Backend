@@ -143,7 +143,6 @@ function getUserCommentsList(req, res, next) {
   Comment.find({ commentAuthor: userId })
     .populate({ path: "commentedRecipe", select: "title" })
     .then((foundComments) => {
-      console.log(foundComments);
       res.status(200).json(foundComments);
     })
     .catch((err) => res.send(err));
