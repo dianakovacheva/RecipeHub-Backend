@@ -1,0 +1,146 @@
+[debug] [2024-03-23T18:14:04.893Z] ----------------------------------------------------------------------
+[debug] [2024-03-23T18:14:04.894Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] [2024-03-23T18:14:04.894Z] CLI Version:   13.5.2
+[debug] [2024-03-23T18:14:04.895Z] Platform:      darwin
+[debug] [2024-03-23T18:14:04.895Z] Node Version:  v18.15.0
+[debug] [2024-03-23T18:14:04.898Z] Time:          Sat Mar 23 2024 19:14:04 GMT+0100 (Central European Standard Time)
+[debug] [2024-03-23T18:14:04.898Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-03-23T18:14:04.929Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-03-23T18:14:04.930Z] > authorizing via signed-in user (diana.marinova.kovacheva@gmail.com)
+[debug] [2024-03-23T18:14:04.930Z] [iam] checking project recipehub-20652 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2024-03-23T18:14:04.931Z] > refreshing access token with scopes: []
+[debug] [2024-03-23T18:14:04.931Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2024-03-23T18:14:04.931Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-03-23T18:14:05.157Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2024-03-23T18:14:05.158Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-03-23T18:14:05.172Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/recipehub-20652:testIamPermissions [none]
+[debug] [2024-03-23T18:14:05.172Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/recipehub-20652:testIamPermissions x-goog-quota-user=projects/recipehub-20652
+[debug] [2024-03-23T18:14:05.172Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/recipehub-20652:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2024-03-23T18:14:06.066Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/recipehub-20652:testIamPermissions 200
+[debug] [2024-03-23T18:14:06.066Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/recipehub-20652:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2024-03-23T18:14:06.067Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/recipehub-20652/serviceAccounts/recipehub-20652@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2024-03-23T18:14:06.067Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/recipehub-20652/serviceAccounts/recipehub-20652@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2024-03-23T18:14:06.985Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/recipehub-20652/serviceAccounts/recipehub-20652@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2024-03-23T18:14:06.985Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/recipehub-20652/serviceAccounts/recipehub-20652@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[info] 
+[info] === Deploying to 'recipehub-20652'...
+[info] 
+[info] i  deploying functions 
+[debug] [2024-03-23T18:14:06.991Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/recipehub-20652 [none]
+[debug] [2024-03-23T18:14:07.404Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/recipehub-20652 200
+[debug] [2024-03-23T18:14:07.405Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/recipehub-20652 {"projectId":"recipehub-20652","projectNumber":"80178340385","displayName":"RecipeHub","name":"projects/recipehub-20652","resources":{"hostingSite":"recipehub-20652"},"state":"ACTIVE","etag":"1_b614a07f-f95c-4a58-8d94-746e683f28d8"}
+[info] i  functions: preparing codebase default for deployment 
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[info] i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled... 
+[debug] [2024-03-23T18:14:07.408Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/recipehub-20652/services/cloudfunctions.googleapis.com [none]
+[debug] [2024-03-23T18:14:07.408Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/recipehub-20652/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/recipehub-20652
+[debug] [2024-03-23T18:14:07.411Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/recipehub-20652/services/runtimeconfig.googleapis.com [none]
+[debug] [2024-03-23T18:14:07.411Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/recipehub-20652/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/recipehub-20652
+[debug] [2024-03-23T18:14:07.412Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/recipehub-20652/services/cloudbuild.googleapis.com [none]
+[debug] [2024-03-23T18:14:07.412Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/recipehub-20652/services/cloudbuild.googleapis.com x-goog-quota-user=projects/recipehub-20652
+[debug] [2024-03-23T18:14:07.413Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/recipehub-20652/services/artifactregistry.googleapis.com [none]
+[debug] [2024-03-23T18:14:07.413Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/recipehub-20652/services/artifactregistry.googleapis.com x-goog-quota-user=projects/recipehub-20652
+[debug] [2024-03-23T18:14:08.423Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/recipehub-20652/services/runtimeconfig.googleapis.com 200
+[debug] [2024-03-23T18:14:08.424Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/recipehub-20652/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2024-03-23T18:14:08.443Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/recipehub-20652/services/cloudbuild.googleapis.com 200
+[debug] [2024-03-23T18:14:08.443Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/recipehub-20652/services/cloudbuild.googleapis.com [omitted]
+[info] ✔  functions: required API cloudbuild.googleapis.com is enabled 
+[debug] [2024-03-23T18:14:08.458Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/recipehub-20652/services/cloudfunctions.googleapis.com 200
+[debug] [2024-03-23T18:14:08.458Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/recipehub-20652/services/cloudfunctions.googleapis.com [omitted]
+[info] ✔  functions: required API cloudfunctions.googleapis.com is enabled 
+[debug] [2024-03-23T18:14:08.511Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/recipehub-20652/services/artifactregistry.googleapis.com 200
+[debug] [2024-03-23T18:14:08.512Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/recipehub-20652/services/artifactregistry.googleapis.com [omitted]
+[info] ✔  artifactregistry: required API artifactregistry.googleapis.com is enabled 
+[debug] [2024-03-23T18:14:08.512Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/recipehub-20652/adminSdkConfig [none]
+[debug] [2024-03-23T18:14:08.790Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/recipehub-20652/adminSdkConfig 200
+[debug] [2024-03-23T18:14:08.790Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/recipehub-20652/adminSdkConfig {"projectId":"recipehub-20652","storageBucket":"recipehub-20652.appspot.com"}
+[debug] [2024-03-23T18:14:08.791Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/recipehub-20652/configs [none]
+[debug] [2024-03-23T18:14:09.128Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/recipehub-20652/configs 200
+[debug] [2024-03-23T18:14:09.128Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/recipehub-20652/configs {}
+[debug] [2024-03-23T18:14:09.131Z] Validating nodejs source
+[debug] [2024-03-23T18:14:09.628Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^11.8.0",
+    "firebase-functions": "^4.3.1",
+    "bcrypt": "^5.0.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.19"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.1.0",
+    "nodemon": "^2.0.4"
+  },
+  "private": true
+}
+[debug] [2024-03-23T18:14:09.628Z] Building nodejs source
+[info] i  functions: Loading and analyzing source code for codebase default to determine what to deploy 
+[debug] [2024-03-23T18:14:09.629Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-03-23T18:14:09.635Z] Found firebase-functions binary at '/Users/diana/Learning/01-Web-Dev/06_SoftUni-Software-Engineering/GitHub/RecipeHub-Backend/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8915
+
+[info] Listening on port 8915!
+
+[error] node:events:491
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8915
+    at Server.setupListenHandle [as _listen2] (node:net:1740:16)
+    at listenInCluster (node:net:1788:12)
+    at Server.listen (node:net:1876:7)
+    at Function.listen (/Users/diana/Learning/01-Web-Dev/06_SoftUni-Software-Engineering/GitHub/RecipeHub-Backend/functions/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/Users/diana/Learning/01-Web-Dev/06_SoftUni-Software-Engineering/GitHub/RecipeHub-Backend/functions/index.js:34:5)
+    at Module._compile (node:internal/modules/cjs/loader:1254:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1308:10)
+    at Module.load (node:internal/modules/cjs/loader:1117:32)
+    at Module._load (node:internal/modules/cjs/loader:958:12)
+    at Module.require (node:internal/modules/cjs/loader:1141:19)
+    at require (node:internal/modules/cjs/helpers:110:18)
+    at loadModule (/Users/diana/Learning/01-Web-Dev/06_SoftUni-Software-Engineering/GitHub/RecipeHub-Backend/functions/node_modules/firebase-functions/lib/runtime/loader.js:40:16)
+    at loadStack (/Users/diana/Learning/01-Web-Dev/06_SoftUni-Software-Engineering/GitHub/RecipeHub-Backend/functions/node_modules/firebase-functions/lib/runtime/loader.js:93:23)
+    at /Users/diana/Learning/01-Web-Dev/06_SoftUni-Software-Engineering/GitHub/RecipeHub-Backend/functions/node_modules/firebase-functions/lib/bin/firebase-functions.js:56:56
+    at Layer.handle [as handle_request] (/Users/diana/Learning/01-Web-Dev/06_SoftUni-Software-Engineering/GitHub/RecipeHub-Backend/functions/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/diana/Learning/01-Web-Dev/06_SoftUni-Software-Engineering/GitHub/RecipeHub-Backend/functions/node_modules/express/lib/router/route.js:149:13)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1767:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 8915
+}
+
+Node.js v18.15.0
+
+[debug] [2024-03-23T18:14:11.093Z] Failed to call quitquitquit. This often means the server failed to start request to http://localhost:8915/__/quitquitquit failed, reason: connect ECONNREFUSED ::1:8915 {"message":"request to http://localhost:8915/__/quitquitquit failed, reason: connect ECONNREFUSED ::1:8915","type":"system","errno":"ECONNREFUSED","code":"ECONNREFUSED"}
+[debug] [2024-03-23T18:14:11.094Z] FetchError: request to http://127.0.0.1:8915/__/functions.yaml failed, reason: socket hang up
+    at ClientRequest.<anonymous> (/usr/local/lib/node_modules/firebase-tools/node_modules/node-fetch/lib/index.js:1501:11)
+    at ClientRequest.emit (node:events:513:28)
+    at ClientRequest.emit (node:domain:489:12)
+    at Socket.socketOnEnd (node:_http_client:526:9)
+    at Socket.emit (node:events:525:35)
+    at Socket.emit (node:domain:489:12)
+    at endReadableNT (node:internal/streams/readable:1359:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+[error] 
+[error] Error: An unexpected error has occurred.
